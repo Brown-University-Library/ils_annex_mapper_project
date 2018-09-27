@@ -12,6 +12,7 @@ admin.autodiscover()
 urlpatterns = [
 
     url( r'^admin/', admin.site.urls ),  # eg host/project_x/admin/
+    # url( r'^admin/', include(admin.site.urls) ),
 
     url( r'^info/$', views.info, name='info_url' ),
 
