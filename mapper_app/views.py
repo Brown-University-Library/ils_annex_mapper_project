@@ -25,3 +25,11 @@ def info( request ):
     context_dct = view_info_helper.make_context( request, rq_now, info_txt, taken )
     output = json.dumps( context_dct, sort_keys=True, indent=2 )
     return HttpResponse( output, content_type='application/json; charset=utf-8' )
+
+
+def location_v2( request, ils_code ):
+    return HttpResponse( '`%s` perceived; location handler coming' % ils_code )
+
+
+def pickup_v2( request, ils_code ):
+    return HttpResponse( '`%s` perceived; pickup handler coming' % ils_code )
