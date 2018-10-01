@@ -62,3 +62,25 @@ def pickup_v2( request, ils_code ):
     }
     output = json.dumps( response_dct, sort_keys=True, indent=2 )
     return HttpResponse( output, content_type='application/json; charset=utf-8' )
+
+
+def location_all_v1( request ):
+    """ Returns json showing all of the annex-software `DELIVERY STOP` codes and their corresponding ILS `PICKUP AT` codes. """
+    record_query = LocationMapper.objects.all().order_by( 'ils_code' )
+    record_lst = []
+    record_lst.append( {
+        'definition_ils_code': 'Sierra "PICKUP AT" code',
+        'definition_las_code': 'LAS "DELIVERY STOP" code'
+    } )
+    for record in record_query:
+        record_lst.append( {
+            'ils_code': record.ils_code,
+            'las_code': record.las_code
+        } )
+    response_dct = {
+      'request':'all_entries',
+      'response':record_lst,
+      'service_documentation':settings_app.README_URL
+      }
+    output = json.dumps( response_dct, sort_keys=True, indent=2 )
+    return HttpResponse( output, content_type='application/json; charset=utf-8' )
