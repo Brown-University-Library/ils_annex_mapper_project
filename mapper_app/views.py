@@ -30,7 +30,7 @@ def info( request ):
 
 def location_v2( request, ils_code ):
     """ Returns json showing the annex-software `DELIVERY STOP` code for the given ILS `PICKUP AT` code. """
-    pickup_mapper_record = get_object_or_404(PickupAtMapper, ils_code=ils_code)
+    location_mapper_record = get_object_or_404(LocationMapper, ils_code=ils_code)
     response_dct = {
         'request': {
             'requested_ils_code': ils_code
@@ -38,7 +38,7 @@ def location_v2( request, ils_code ):
         'result': {
             'definition_ils_code': 'Sierra "PICKUP AT" code',
             'definition_las_code': 'LAS "DELIVERY STOP" code',
-            'returned_las_code': pickup_mapper_record.las_code,
+            'returned_las_code': location_mapper_record.las_code,
             'service_documentation': settings_app.README_URL
         }
     }
