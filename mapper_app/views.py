@@ -29,15 +29,15 @@ def info( request ):
 
 
 def location_v2( request, ils_code ):
-    """ Returns json showing the annex-software `DELIVERY STOP` code for the given ILS `PICKUP AT` code. """
+    """ Returns json showing the annex-software `CUSTOMER_CODE` code for the given ILS `LOCATION` code. """
     location_mapper_record = get_object_or_404(LocationMapper, ils_code=ils_code)
     response_dct = {
         'request': {
             'requested_ils_code': ils_code
         },
         'result': {
-            'definition_ils_code': 'Sierra "PICKUP AT" code',
-            'definition_las_code': 'LAS "DELIVERY STOP" code',
+            'definition_ils_code': 'Sierra "LOCATION" code',
+            'definition_las_code': 'LAS "CUSTOMER_CODE" code',
             'returned_las_code': location_mapper_record.las_code,
             'service_documentation': settings_app.README_URL
         }
@@ -65,8 +65,30 @@ def pickup_v2( request, ils_code ):
 
 
 def location_all_v1( request ):
-    """ Returns json showing all of the annex-software `DELIVERY STOP` codes and their corresponding ILS `PICKUP AT` codes. """
+    """ Returns json showing all of the annex-software `CUSTOMER_CODE` codes and their corresponding ILS `LOCATION` codes. """
     record_query = LocationMapper.objects.all().order_by( 'ils_code' )
+    record_lst = []
+    record_lst.append( {
+        'definition_ils_code': 'Sierra "CUSTOMER_CODE" code',
+        'definition_las_code': 'LAS "LOCATION" code'
+    } )
+    for record in record_query:
+        record_lst.append( {
+            'ils_code': record.ils_code,
+            'las_code': record.las_code
+        } )
+    response_dct = {
+      'request':'all_entries',
+      'response':record_lst,
+      'service_documentation':settings_app.README_URL
+      }
+    output = json.dumps( response_dct, sort_keys=True, indent=2 )
+    return HttpResponse( output, content_type='application/json; charset=utf-8' )
+
+
+def pickup_all_v1( request ):
+    """ Returns json showing all of the annex-software `DELIVERY STOP` codes and their corresponding ILS `PICKUP AT` codes. """
+    record_query = PickupAtMapper.objects.all().order_by( 'ils_code' )
     record_lst = []
     record_lst.append( {
         'definition_ils_code': 'Sierra "PICKUP AT" code',
