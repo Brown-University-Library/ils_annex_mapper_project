@@ -17,9 +17,9 @@ urlpatterns = [
     url( r'^info/$', views.info, name='info_url' ),
 
     url( r'^location_api_v1/all/$',  views.location_all_v1, name='location_all_v1_url' ),
+    url( r'^pickup_api_v1/all/$',  views.pickup_all_v1, name='pickup_all_v1_url' ),
 
     url( r'^location_api_v2/ils_code_(?P<ils_code>.*)/$',  views.location_v2, name='location_v2_url' ),
-
     url( r'^pickup_api_v2/ils_code_(?P<ils_code>.*)/$',  views.pickup_v2, name='pickup_v2_url' ),
 
     url( r'^$', RedirectView.as_view(pattern_name='info_url') ),
