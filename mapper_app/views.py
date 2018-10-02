@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import datetime, json, logging, os, pprint
+import datetime, json, logging, os, pprint, urllib
 from . import settings_app
 from .models import LocationMapper, PickupAtMapper
 from django.conf import settings as project_settings
@@ -30,7 +30,8 @@ def info( request ):
 
 def location_v2( request, ils_code ):
     """ Returns json showing the annex-software `CUSTOMER_CODE` code for the given ILS `LOCATION` code. """
-    log.debug( 'ils_code, `%s`' % ils_code )
+    log.debug( 'ils_code initially, `%s`' % ils_code )
+    ils_code = urllib.parse.unquote( ils_code )  # apache seems to be double-encoding
     location_mapper_record = get_object_or_404(LocationMapper, ils_code=ils_code)
     response_dct = {
         'request': {
@@ -49,6 +50,7 @@ def location_v2( request, ils_code ):
 
 def pickup_v2( request, ils_code ):
     """ Returns json showing the annex-software `DELIVERY STOP` code for the given ILS `PICKUP AT` code. """
+    ils_code = urllib.parse.unquote( ils_code )
     pickup_mapper_record = get_object_or_404(PickupAtMapper, ils_code=ils_code)
     response_dct = {
         'request': {
