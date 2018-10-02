@@ -30,6 +30,7 @@ def info( request ):
 
 def location_v2( request, ils_code ):
     """ Returns json showing the annex-software `CUSTOMER_CODE` code for the given ILS `LOCATION` code. """
+    log.debug( 'ils_code, `%s`' % ils_code )
     location_mapper_record = get_object_or_404(LocationMapper, ils_code=ils_code)
     response_dct = {
         'request': {
