@@ -58,4 +58,14 @@ class LocationUrlTest( TestCase ):
         las_code = json.loads( response.content )['result']['returned_las_code']
         self.assertEqual( 'QH', las_code )
 
+    def test_good_location_hit_with_double_encoded_spaces(self):
+        """ Checks ils-code with double-encoded spaces, which seems to be happening on dev and prod apache. """
+        response = self.client.get( '/location_api_v2/ils_code_ANNEX%2520HAY/' )  # project root part of url is assumed
+        log.debug( 'response.content, ```%s```' % response.content )
+        self.assertEqual( 200, response.status_code )
+        submitted_code = json.loads( response.content )['request']['requested_ils_code']
+        self.assertEqual( 'ANNEX HAY', submitted_code )
+        las_code = json.loads( response.content )['result']['returned_las_code']
+        self.assertEqual( 'QH', las_code )
+
     # end class LocationUrlTest()
