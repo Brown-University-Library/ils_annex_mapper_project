@@ -16,7 +16,8 @@ log = logging.getLogger(__name__)
 
 def info( request ):
     """ Returns basic data including branch & commit. """
-    # log.debug( 'request.__dict__, ```%s```' % pprint.pformat(request.__dict__) )
+    log.debug( 'user-agent, ```%s```; ip, ```%s```; referrer, ```%s```' %
+        (request.META.get('HTTP_USER_AGENT', None), request.META.get('REMOTE_ADDR', None), request.META.get('HTTP_REFERER', None)) )
     rq_now = datetime.datetime.now()
     commit = view_info_helper.get_commit()
     branch = view_info_helper.get_branch()
@@ -30,6 +31,8 @@ def info( request ):
 
 def location_v2( request, ils_code ):
     """ Returns json showing the annex-software `CUSTOMER_CODE` code for the given ILS `LOCATION` code. """
+    log.debug( 'user-agent, ```%s```; ip, ```%s```; referrer, ```%s```' %
+        (request.META.get('HTTP_USER_AGENT', None), request.META.get('REMOTE_ADDR', None), request.META.get('HTTP_REFERER', None)) )
     log.debug( 'ils_code initially, `%s`' % ils_code )
     ils_code = urllib.parse.unquote( ils_code )  # apache seems to be double-encoding
     location_mapper_record = get_object_or_404(LocationMapper, ils_code=ils_code)
@@ -50,6 +53,8 @@ def location_v2( request, ils_code ):
 
 def pickup_v2( request, ils_code ):
     """ Returns json showing the annex-software `DELIVERY STOP` code for the given ILS `PICKUP AT` code. """
+    log.debug( 'user-agent, ```%s```; ip, ```%s```; referrer, ```%s```' %
+        (request.META.get('HTTP_USER_AGENT', None), request.META.get('REMOTE_ADDR', None), request.META.get('HTTP_REFERER', None)) )
     ils_code = urllib.parse.unquote( ils_code )
     pickup_mapper_record = get_object_or_404(PickupAtMapper, ils_code=ils_code)
     response_dct = {
@@ -69,6 +74,8 @@ def pickup_v2( request, ils_code ):
 
 def location_all_v1( request ):
     """ Returns json showing all of the annex-software `CUSTOMER_CODE` codes and their corresponding ILS `LOCATION` codes. """
+    log.debug( 'user-agent, ```%s```; ip, ```%s```; referrer, ```%s```' %
+        (request.META.get('HTTP_USER_AGENT', None), request.META.get('REMOTE_ADDR', None), request.META.get('HTTP_REFERER', None)) )
     record_query = LocationMapper.objects.all().order_by( 'ils_code' )
     record_lst = []
     record_lst.append( {
@@ -91,6 +98,8 @@ def location_all_v1( request ):
 
 def pickup_all_v1( request ):
     """ Returns json showing all of the annex-software `DELIVERY STOP` codes and their corresponding ILS `PICKUP AT` codes. """
+    log.debug( 'user-agent, ```%s```; ip, ```%s```; referrer, ```%s```' %
+        (request.META.get('HTTP_USER_AGENT', None), request.META.get('REMOTE_ADDR', None), request.META.get('HTTP_REFERER', None)) )
     record_query = PickupAtMapper.objects.all().order_by( 'ils_code' )
     record_lst = []
     record_lst.append( {
